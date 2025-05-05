@@ -3,47 +3,53 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Valoracion;
 use Illuminate\Http\Request;
 
 class ValoracionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        return Valoracion::with(['usuario', 'vinilo'])->get();
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'usuario_id' => 'required|exists:usuarios,id',
+            'vinilo_id' => 'required|exists:vinilos,id',
+            'comentario' => 'required|string',
+            'fecha_valoracion' => 'required|date',
+        ]);
+
+        $valoracion = Valoracion::create($data);
+
+        return response()->json($valoracion, 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show(Valoracion $valoracion)
     {
-        //
+        return $valoracion->load(['usuario', 'vinilo']);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Valoracion $valoracion)
     {
-        //
+        $data = $request->validate([
+            'usuario_id' => 'sometimes|exists:usuarios,id',
+            'vinilo_id' => 'sometimes|exists:vinilos,id',
+            'comentario' => 'sometimes|string',
+            'fecha_valoracion' => 'sometimes|date',
+        ]);
+
+        $valoracion->update($data);
+
+        return response()->json($valoracion);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy(Valoracion $valoracion)
     {
-        //
+        $valoracion->delete();
+
+        return response()->json(['message' => 'Valoración eliminada']);
     }
 }

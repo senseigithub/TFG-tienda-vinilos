@@ -3,47 +3,68 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Usuario;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 
 class UsuarioController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        return Usuario::all();
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'nombre' => 'required|string|max:255',
+            'apellidos' => 'required|string|max:255',
+            'dnie' => 'required|string|unique:usuarios,dnie',
+            'email' => 'required|email|unique:usuarios,email',
+            'password' => 'required|string|min:6',
+            'telefono' => 'required|string|max:20',
+            'rol' => 'required|in:admin,usuario',
+            'carrito' => 'nullable|string',
+        ]);
+
+        $data['password'] = Hash::make($data['password']);
+
+        $usuario = Usuario::create($data);
+
+        return response()->json($usuario, 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show(Usuario $usuario)
     {
-        //
+        return response()->json($usuario);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Usuario $usuario)
     {
-        //
+        $data = $request->validate([
+            'nombre' => 'sometimes|string|max:255',
+            'apellidos' => 'sometimes|string|max:255',
+            'dnie' => 'sometimes|string|unique:usuarios,dnie,' . $usuario->id,
+            'email' => 'sometimes|email|unique:usuarios,email,' . $usuario->id,
+            'password' => 'nullable|string|min:6',
+            'telefono' => 'sometimes|string|max:20',
+            'rol' => 'sometimes|in:admin,usuario',
+            'carrito' => 'nullable|string',
+        ]);
+
+        if (isset($data['password'])) {
+            $data['password'] = Hash::make($data['password']);
+        }
+
+        $usuario->update($data);
+
+        return response()->json($usuario);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy(Usuario $usuario)
     {
-        //
+        $usuario->delete();
+
+        return response()->json(['message' => 'Usuario eliminado']);
     }
 }

@@ -14,7 +14,6 @@ Route::get('/ping', function () {
     return response()->json(['message' => 'API funcionando ✅']);
 });
 
-// Rutas RESTful para todos los modelos
 Route::apiResource('vinilos', ViniloController::class);
 Route::apiResource('proveedores', ProveedorController::class);
 Route::apiResource('pedidos', PedidoController::class);

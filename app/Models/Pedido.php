@@ -8,6 +8,14 @@ class Pedido extends Model
 {
     protected $table = 'pedidos';
 
+    protected $fillable = [
+        'usuario_id',
+        'direccion_envio_id',
+        'fecha_pedido',
+        'estado',
+        'total',
+    ];
+    
     public function usuario() {
         return $this->belongsTo(Usuario::class);
     }

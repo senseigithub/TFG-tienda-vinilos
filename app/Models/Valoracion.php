@@ -8,6 +8,13 @@ class Valoracion extends Model
 {
     protected $table = 'valoraciones';
 
+    protected $fillable = [
+        'usuario_id',
+        'vinilo_id',
+        'comentario',
+        'fecha_valoracion',
+    ];
+
     public function usuario() {
         return $this->belongsTo(Usuario::class);
     }

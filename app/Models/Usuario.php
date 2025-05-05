@@ -8,6 +8,19 @@ class Usuario extends Model
 {
     protected $table = 'usuarios';
 
+    protected $fillable = [
+        'nombre',
+        'apellidos',
+        'dnie',
+        'email',
+        'password',
+        'telefono',
+        'rol',
+        'carrito',
+    ];
+
+    protected $hidden = ['password'];
+
     public function direccionesEnvio() {
         return $this->hasMany(DireccionEnvio::class);
     }
