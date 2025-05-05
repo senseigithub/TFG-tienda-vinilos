@@ -18,7 +18,7 @@ class ProveedorController extends Controller
         $data = $request->validate([
             'nombre' => 'required|string|max:255',
             'email' => 'required|email|unique:proveedores,email',
-            'telefono' => 'required|string|max:20',
+            'telefono' => ['required', 'regex:/^[679]\d{8}$/'],
             'direccion' => 'required|string|max:255',
         ]);
 
@@ -37,7 +37,7 @@ class ProveedorController extends Controller
         $data = $request->validate([
             'nombre' => 'sometimes|string|max:255',
             'email' => 'sometimes|email|unique:proveedores,email,' . $proveedor->id,
-            'telefono' => 'sometimes|string|max:20',
+            'telefono' => ['required', 'regex:/^[679]\d{8}$/'],
             'direccion' => 'sometimes|string|max:255',
         ]);
 

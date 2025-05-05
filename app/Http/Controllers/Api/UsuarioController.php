@@ -19,14 +19,18 @@ class UsuarioController extends Controller
         $data = $request->validate([
             'nombre' => 'required|string|max:255',
             'apellidos' => 'required|string|max:255',
-            'dnie' => 'required|string|unique:usuarios,dnie',
+            'dnie' => [
+                'required',
+                'regex:/^([XYZ]?\d{7,8}[A-Z])$/',
+                'unique:usuarios,dnie',
+            ],
             'email' => 'required|email|unique:usuarios,email',
             'password' => 'required|string|min:6',
-            'telefono' => 'required|string|max:20',
+            'telefono' => ['required', 'regex:/^[679]\d{8}$/'],
             'rol' => 'required|in:admin,usuario',
             'carrito' => 'nullable|string',
         ]);
-
+        
         $data['password'] = Hash::make($data['password']);
 
         $usuario = Usuario::create($data);
@@ -44,10 +48,14 @@ class UsuarioController extends Controller
         $data = $request->validate([
             'nombre' => 'sometimes|string|max:255',
             'apellidos' => 'sometimes|string|max:255',
-            'dnie' => 'sometimes|string|unique:usuarios,dnie,' . $usuario->id,
+            'dnie' => [
+                'sometimes',
+                'regex:/^([XYZ]?\d{7,8}[A-Z])$/',
+                'unique:usuarios,dnie,' . $usuario->id,
+            ],
             'email' => 'sometimes|email|unique:usuarios,email,' . $usuario->id,
             'password' => 'nullable|string|min:6',
-            'telefono' => 'sometimes|string|max:20',
+            'telefono' => ['sometimes', 'regex:/^[679]\d{8}$/'],
             'rol' => 'sometimes|in:admin,usuario',
             'carrito' => 'nullable|string',
         ]);
