@@ -10,7 +10,7 @@ class DireccionEnvioController extends Controller
 {
     public function index()
     {
-        return DireccionEnvio::with('usuario')->get();
+    return DireccionEnvio::where('usuario_id', auth()->user()->id)->get();
     }
 
     public function store(Request $request)

@@ -15,6 +15,13 @@ class Valoracion extends Model
         'fecha_valoracion',
     ];
 
+    // app/Models/Valoracion.php
+public function getRouteKeyName()
+{
+    return 'id';
+}
+
+
     public function usuario() {
         return $this->belongsTo(Usuario::class);
     }

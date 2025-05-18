@@ -20,23 +20,24 @@ Route::get('/ping', function () {
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 
-// Rutas protegidas
+// ✅ Público: ver vinilos
+Route::apiResource('vinilos', ViniloController::class)->only(['index', 'show']);
+
+// 🔐 Protegidas
 Route::middleware('auth:sanctum')->group(function () {
 
-    // Info del usuario autenticado
     Route::get('/me', [AuthController::class, 'me']);
     Route::post('/logout', [AuthController::class, 'logout']);
 
-    // Para todos los usuarios autenticados
     Route::apiResource('usuarios', UsuarioController::class);
     Route::apiResource('direcciones-envio', DireccionEnvioController::class);
     Route::apiResource('pedidos', PedidoController::class);
     Route::apiResource('detalles-pedido', DetallePedidoController::class);
     Route::apiResource('valoraciones', ValoracionController::class);
 
-    // Solo admins
     Route::middleware('is_admin')->group(function () {
-        Route::apiResource('vinilos', ViniloController::class);
+        Route::apiResource('vinilos', ViniloController::class)->except(['index', 'show']);
         Route::apiResource('proveedores', ProveedorController::class);
     });
 });
+

@@ -8,9 +8,19 @@ use Illuminate\Http\Request;
 
 class ViniloController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return Vinilo::with('proveedor')->get();
+        $query = Vinilo::with('proveedor');
+
+        if ($request->has('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('titulo', 'like', "%$search%")
+                    ->orWhere('artista', 'like', "%$search%");
+            });
+        }
+
+        return $query->get();
     }
 
     public function store(Request $request)
@@ -31,9 +41,9 @@ class ViniloController extends Controller
         return response()->json($vinilo, 201);
     }
 
-    public function show(Vinilo $vinilo)
+    public function show($id)
     {
-        return $vinilo->load('proveedor');
+        return Vinilo::with('proveedor')->findOrFail($id);
     }
 
     public function update(Request $request, Vinilo $vinilo)
