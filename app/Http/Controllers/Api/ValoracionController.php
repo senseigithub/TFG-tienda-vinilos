@@ -38,7 +38,7 @@ class ValoracionController extends Controller
             'usuario_id' => 'sometimes|exists:usuarios,id',
             'vinilo_id' => 'sometimes|exists:vinilos,id',
             'comentario' => 'sometimes|string',
-            'fecha_valoracion' => 'sometimes|date',
+            'fecha_valoracion' => 'sometimes|date_format:Y-m-d\TH:i:sP',
         ]);
 
         $valoracion->update($data);
@@ -46,8 +46,14 @@ class ValoracionController extends Controller
         return response()->json($valoracion);
     }
 
-    public function destroy(Valoracion $valoracion)
+    public function destroy($id)
     {
+        $valoracion = \App\Models\Valoracion::find($id);
+
+        if (!$valoracion) {
+            return response()->json(['error' => 'Valoración no encontrada'], 404);
+        }
+
         $valoracion->delete();
 
         return response()->json(['message' => 'Valoración eliminada']);
