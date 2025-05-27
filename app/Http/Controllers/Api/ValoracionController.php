@@ -32,19 +32,28 @@ class ValoracionController extends Controller
         return $valoracion->load(['usuario', 'vinilo']);
     }
 
-    public function update(Request $request, Valoracion $valoracion)
-    {
-        $data = $request->validate([
-            'usuario_id' => 'sometimes|exists:usuarios,id',
-            'vinilo_id' => 'sometimes|exists:vinilos,id',
-            'comentario' => 'sometimes|string',
-            'fecha_valoracion' => 'sometimes|date_format:Y-m-d\TH:i:sP',
-        ]);
+    public function update(Request $request, $id)
+{
+    $valoracion = \App\Models\Valoracion::find($id);
 
-        $valoracion->update($data);
-
-        return response()->json($valoracion);
+    if (!$valoracion) {
+        return response()->json(['error' => 'Valoración no encontrada'], 404);
     }
+
+    $data = $request->validate([
+        'comentario' => 'required|string',
+    ]);
+
+    $valoracion->comentario = $data['comentario'];
+    $valoracion->save();
+
+    // Opcional: recarga las relaciones para enviar info completa al frontend
+    $valoracion->load(['usuario', 'vinilo']);
+
+    return response()->json($valoracion);
+}
+
+
 
     public function destroy($id)
     {

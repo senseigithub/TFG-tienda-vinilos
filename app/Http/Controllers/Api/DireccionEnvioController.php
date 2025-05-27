@@ -10,7 +10,7 @@ class DireccionEnvioController extends Controller
 {
     public function index()
     {
-    return DireccionEnvio::where('usuario_id', auth()->user()->id)->get();
+        return DireccionEnvio::where('usuario_id', auth()->user()->id)->get();
     }
 
     public function store(Request $request)
@@ -48,8 +48,12 @@ class DireccionEnvioController extends Controller
         return response()->json($direcciones_envio);
     }
 
-    public function destroy(DireccionEnvio $direcciones_envio)
+    public function destroy($id)
     {
+        $direcciones_envio = \App\Models\DireccionEnvio::find($id);
+        if (!$direcciones_envio) {
+            return response()->json(['error' => 'Dirección de envío no encontrada'], 404);
+        }
         $direcciones_envio->delete();
 
         return response()->json(['message' => 'Dirección de envío eliminada']);

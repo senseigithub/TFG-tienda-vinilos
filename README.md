@@ -8,13 +8,17 @@ Este proyecto es una API backend desarrollada en **Laravel 11** para gestionar u
 
 ## 📦 Funcionalidades principales
 
-* ✅ Autenticación de usuarios con roles (admin y usuario).
-* ✅ Gestión de vinilos: listar, crear, actualizar, eliminar (admin).
-* ✅ Gestión de proveedores (admin).
-* ✅ Gestión de usuarios, direcciones, pedidos, valoraciones.
-* ✅ Carrito de compras y tramitación de pedidos.
-* ✅ Protección con middleware `auth:sanctum` y `is_admin`.
-
+✅ Registro e inicio de sesión de usuarios  
+✅ Navegar y comprar vinilos  
+✅ Dejar valoraciones y comentarios  
+✅ Gestionar direcciones de envío  
+✅ Administrar pedidos (usuarios y admins)  
+✅ Panel de administración para:
+- Usuarios
+- Vinilos
+- Proveedores
+- Pedidos
+- Direcciones
 ---
 
 ## ⚙ Instalación del proyecto

@@ -32,23 +32,31 @@ class ProveedorController extends Controller
         return response()->json($proveedor, 200);
     }
 
-    public function update(Request $request, Proveedor $proveedor)
-{
-    $data = $request->validate([
-        'nombre' => 'sometimes|string|max:255',
-        'email' => 'sometimes|email|unique:proveedores,email,' . $proveedor->id,
-        'telefono' => ['sometimes', 'regex:/^[679]\d{8}$/'],
-        'direccion' => 'sometimes|string|max:255',
-    ]);
-
-    $proveedor->update($data);
-
-    return response()->json($proveedor, 200);
-}
-
-
-    public function destroy(Proveedor $proveedor)
+    public function update(Request $request, $id)
     {
+        $proveedor = Proveedor::find($id);
+        if (!$proveedor) {
+            return response()->json(['error' => 'Proveedor no encontrado'], 404);
+        }
+
+        $data = $request->validate([
+            'nombre'    => 'required|string|max:255',
+            'email'     => 'required|email|max:255',
+            'telefono'  => 'nullable|string|max:50',
+            'direccion' => 'nullable|string|max:500',
+        ]);
+
+        $proveedor->update($data);
+
+        return response()->json($proveedor, 200);
+    }
+
+    public function destroy($id)
+    {
+        $proveedor = \App\Models\Proveedor::find($id);
+        if (!$proveedor) {
+            return response()->json(['error' => 'Proveedor no encontrado'], 404);
+        }
         $proveedor->delete();
 
         return response()->json(['message' => 'Proveedor eliminado correctamente.'], 200);
