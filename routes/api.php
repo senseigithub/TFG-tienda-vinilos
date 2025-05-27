@@ -34,10 +34,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('pedidos', PedidoController::class);
     Route::apiResource('detalles-pedido', DetallePedidoController::class);
     Route::apiResource('valoraciones', ValoracionController::class);
+    Route::apiResource('proveedores', ProveedorController::class);
 
     Route::middleware('is_admin')->group(function () {
         Route::apiResource('vinilos', ViniloController::class)->except(['index', 'show']);
-        Route::apiResource('proveedores', ProveedorController::class);
+        
     });
 });
 

@@ -1,61 +1,236 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Vinilos API Backend
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+**Autor:** Adrian Montes Bastida
 
-## About Laravel
+Este proyecto es una API backend desarrollada en **Laravel 11** para gestionar una tienda de vinilos. Permite manejar usuarios, vinilos, proveedores, pedidos, direcciones de envío, valoraciones y detalles de pedido.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 📦 Funcionalidades principales
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+* ✅ Autenticación de usuarios con roles (admin y usuario).
+* ✅ Gestión de vinilos: listar, crear, actualizar, eliminar (admin).
+* ✅ Gestión de proveedores (admin).
+* ✅ Gestión de usuarios, direcciones, pedidos, valoraciones.
+* ✅ Carrito de compras y tramitación de pedidos.
+* ✅ Protección con middleware `auth:sanctum` y `is_admin`.
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## ⚙ Instalación del proyecto
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+1️⃣ Clonar el repositorio:
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+```bash
+git clone <URL_DEL_REPO>
+```
 
-## Laravel Sponsors
+2️⃣ Entrar al proyecto:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+```bash
+cd vinilos-backend
+```
 
-### Premium Partners
+3️⃣ Instalar dependencias:
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development/)**
-- **[Active Logic](https://activelogic.com)**
+```bash
+composer install
+```
 
-## Contributing
+4️⃣ Configurar archivo `.env`:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+cp .env.example .env
+```
 
-## Code of Conduct
+Edita el `.env` y pon tu base de datos, por ejemplo:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```ini
+DB_CONNECTION=sqlite
+DB_DATABASE=/ruta/completa/a/database.sqlite
+```
 
-## Security Vulnerabilities
+5️⃣ Crear la base de datos (si usas SQLite):
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+touch database/database.sqlite
+```
 
-## License
+6️⃣ Ejecutar migraciones:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```bash
+php artisan migrate
+```
+
+7️⃣ (Opcional) Poblar datos con seeders:
+
+```bash
+php artisan db:seed
+```
+
+8️⃣ Levantar el servidor:
+
+```bash
+php artisan serve
+```
+
+El backend estará disponible en:
+
+```
+http://localhost:8000
+```
+
+---
+
+## 🔐 Autenticación
+
+* Obtener un token:
+
+  ```
+  POST /api/login
+  ```
+
+* Registrarse:
+
+  ```
+  POST /api/register
+  ```
+
+* Las rutas protegidas requieren:
+
+  ```
+  Authorization: Bearer <token>
+  ```
+
+---
+
+## 🔗 Endpoints disponibles
+
+### ✅ Auth
+
+| Método | Ruta          | Descripción                |
+| ------ | ------------- | -------------------------- |
+| POST   | /api/login    | Login de usuario           |
+| POST   | /api/register | Registro de usuario        |
+| POST   | /api/logout   | Logout del usuario (token) |
+| GET    | /api/me       | Obtener datos del usuario  |
+
+---
+
+### 🎵 Vinilos
+
+| Método | Ruta              | Descripción               |
+| ------ | ----------------- | ------------------------- |
+| GET    | /api/vinilos      | Listar todos los vinilos  |
+| GET    | /api/vinilos/{id} | Ver detalle de un vinilo  |
+| POST   | /api/vinilos      | Crear vinilo (admin)      |
+| PUT    | /api/vinilos/{id} | Actualizar vinilo (admin) |
+| DELETE | /api/vinilos/{id} | Eliminar vinilo (admin)   |
+
+---
+
+### 📦 Proveedores
+
+| Método | Ruta                  | Descripción               |
+| ------ | --------------------- | ------------------------- |
+| GET    | /api/proveedores      | Listar todos (admin)      |
+| POST   | /api/proveedores      | Crear proveedor (admin)   |
+| GET    | /api/proveedores/{id} | Obtener proveedor (admin) |
+| PUT    | /api/proveedores/{id} | Actualizar proveedor      |
+| DELETE | /api/proveedores/{id} | Eliminar proveedor        |
+
+---
+
+### 👤 Usuarios
+
+| Método | Ruta               | Descripción             |
+| ------ | ------------------ | ----------------------- |
+| GET    | /api/usuarios      | Listar todos (admin)    |
+| POST   | /api/usuarios      | Crear usuario (admin)   |
+| GET    | /api/usuarios/{id} | Obtener usuario (admin) |
+| PUT    | /api/usuarios/{id} | Actualizar usuario      |
+| DELETE | /api/usuarios/{id} | Eliminar usuario        |
+
+---
+
+### 📍 Direcciones de Envío
+
+| Método | Ruta                        | Descripción                    |
+| ------ | --------------------------- | ------------------------------ |
+| GET    | /api/direcciones-envio      | Listar direcciones del usuario |
+| POST   | /api/direcciones-envio      | Crear dirección de envío       |
+| GET    | /api/direcciones-envio/{id} | Obtener dirección específica   |
+| PUT    | /api/direcciones-envio/{id} | Actualizar dirección           |
+| DELETE | /api/direcciones-envio/{id} | Eliminar dirección             |
+
+---
+
+### 🛒 Pedidos
+
+| Método | Ruta              | Descripción               |
+| ------ | ----------------- | ------------------------- |
+| GET    | /api/pedidos      | Listar pedidos            |
+| POST   | /api/pedidos      | Crear pedido              |
+| GET    | /api/pedidos/{id} | Obtener pedido            |
+| PUT    | /api/pedidos/{id} | Actualizar pedido (admin) |
+| DELETE | /api/pedidos/{id} | Eliminar pedido (admin)   |
+
+---
+
+### 📑 Detalles de Pedido
+
+| Método | Ruta                      | Descripción                |
+| ------ | ------------------------- | -------------------------- |
+| GET    | /api/detalles-pedido      | Listar detalles de pedidos |
+| POST   | /api/detalles-pedido      | Crear detalle de pedido    |
+| GET    | /api/detalles-pedido/{id} | Obtener detalle específico |
+| PUT    | /api/detalles-pedido/{id} | Actualizar detalle         |
+| DELETE | /api/detalles-pedido/{id} | Eliminar detalle           |
+
+---
+
+### ⭐ Valoraciones
+
+| Método | Ruta                   | Descripción                   |
+| ------ | ---------------------- | ----------------------------- |
+| GET    | /api/valoraciones      | Listar valoraciones           |
+| POST   | /api/valoraciones      | Crear valoración              |
+| GET    | /api/valoraciones/{id} | Obtener valoración específica |
+| PUT    | /api/valoraciones/{id} | Actualizar valoración         |
+| DELETE | /api/valoraciones/{id} | Eliminar valoración           |
+
+---
+
+## 🛠 Cómo probar los endpoints
+
+Puedes usar herramientas como **Postman** o `curl`.
+
+### Ejemplo de login:
+
+```bash
+curl -X POST http://localhost:8000/api/login \
+-H "Content-Type: application/json" \
+-d '{
+    "email": "admin@example.com",
+    "password": "password"
+}'
+```
+
+### Usar el token recibido:
+
+```bash
+curl -X GET http://localhost:8000/api/proveedores \
+-H "Authorization: Bearer <token>"
+```
+
+---
+
+## 🚀 Notas técnicas
+
+* Usa **Laravel Sanctum** para autenticación por token.
+* Los endpoints de admin están protegidos por el middleware `is_admin`.
+* Las relaciones en las migraciones están configuradas con `onDelete('cascade')` donde corresponde.
+
+---
+
+**¡Proyecto desarrollado con ❤️ por Adrian Montes Bastida!**

@@ -33,18 +33,19 @@ class ProveedorController extends Controller
     }
 
     public function update(Request $request, Proveedor $proveedor)
-    {
-        $data = $request->validate([
-            'nombre' => 'sometimes|string|max:255',
-            'email' => 'sometimes|email|unique:proveedores,email,' . $proveedor->id,
-            'telefono' => ['required', 'regex:/^[679]\d{8}$/'],
-            'direccion' => 'sometimes|string|max:255',
-        ]);
+{
+    $data = $request->validate([
+        'nombre' => 'sometimes|string|max:255',
+        'email' => 'sometimes|email|unique:proveedores,email,' . $proveedor->id,
+        'telefono' => ['sometimes', 'regex:/^[679]\d{8}$/'],
+        'direccion' => 'sometimes|string|max:255',
+    ]);
 
-        $proveedor->update($data);
+    $proveedor->update($data);
 
-        return response()->json($proveedor, 200);
-    }
+    return response()->json($proveedor, 200);
+}
+
 
     public function destroy(Proveedor $proveedor)
     {

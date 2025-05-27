@@ -50,6 +50,7 @@ class PedidoController extends Controller
 
     public function destroy(Pedido $pedido)
     {
+        $pedido->detalles()->delete();
         $pedido->delete();
 
         return response()->json(['message' => 'Pedido eliminado']);

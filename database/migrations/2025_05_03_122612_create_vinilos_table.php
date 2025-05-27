@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('vinilos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('proveedor_id')->constrained('proveedores');
+            $table->foreignId('proveedor_id')->constrained('proveedores')->onDelete('cascade');
             $table->string('titulo');
             $table->string('artista');
             $table->string('genero');
